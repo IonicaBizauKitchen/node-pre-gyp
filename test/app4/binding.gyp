@@ -1,12 +1,12 @@
 {
   'variables': {
-      "module_name":"app3",
-      "module_path":"./lib/"
+      "module_name":"<!(node -e \"console.log(require('./package.json').binary.module_name)\")",
+      "module_path":"<!(node -e \"console.log(require('./package.json').binary.module_path)\")",
   },
   "targets": [
     {
       "target_name": "<(module_name)",
-      "sources": [ "app3.cc" ],
+      "sources": [ "app4.cpp" ],
       "dependencies": [
         "deps/mylib.gyp:mylib"
       ]
@@ -19,8 +19,14 @@
         {
           "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
           "destination": "<(module_path)"
+        },
+        {
+          "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
+          "destination": "<(module_path)"
         }
       ]
     }
   ]
 }
+
+

@@ -33,7 +33,7 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
 
-For more examples see also the [test apps https://github.com/springmeyer/node-pre-gyp/tree/master/test].
+For more examples see also the [test apps](test/).
 
 ## Usage
 
@@ -67,8 +67,8 @@ node-pre-gyp build package
 
 Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri`.
 
- - Learn how to [host on S3](https://github.com/springmeyer/node-pre-gyp#s3-hosting).
- - See [Travis Packaging](https://github.com/springmeyer/node-pre-gyp#s3-hosting#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
+ - Learn how to [host on S3](#s3-hosting).
+ - See [Travis Packaging](#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
 
 **4) Add a custom `install` script**
 
@@ -213,14 +213,13 @@ before_install:
 
 You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
 
-    if echo $TRAVIS_COMMIT | grep -q "[publish]"; then
+    if test "${TRAVIS_COMMIT#*[publish]}" != "$TRAVIS_COMMIT"; then
        node-pre-gyp publish
     fi
 
 Or you could automatically detect if the git branch is a tag:
 
-    IS_TAG=$(git describe --exact-match --tags HEAD || true)
-    if [ $IS_TAG ];
+    if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] ; then
        node-pre-gyp publish
     fi
 
